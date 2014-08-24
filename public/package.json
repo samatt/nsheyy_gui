@@ -1,0 +1,20 @@
+{
+  "name": "nsheyyy",
+  "version": "0.0.1",
+  "main": "index.html",
+  "window": {
+    "title": "N.S.Heyyy",
+    "toolbar": false,
+    "frame": true,
+    "position": "center",
+    "width": 800,
+    "height": 480,
+    "show": true,
+    "focus": true,
+    "resizable": false
+  },
+  "dependencies": {
+    "nshey": "0.0.3"
+  }
+}
+

@@ -1,0 +1,44 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <title>N.S.Heyyy</title>
+  <link rel="stylesheet" href="style.css">
+</head>
+<body>
+
+<!--<div id="logo">-->
+<!--███╗   ██╗   ███████╗   ██╗  ██╗███████╗██╗   ██╗██╗   ██╗██╗   ██╗-->
+<!--████╗  ██║   ██╔════╝   ██║  ██║██╔════╝╚██╗ ██╔╝╚██╗ ██╔╝╚██╗ ██╔╝-->
+<!--██╔██╗ ██║   ███████╗   ███████║█████╗   ╚████╔╝  ╚████╔╝  ╚████╔╝ -->
+<!--██║╚██╗██║   ╚════██║   ██╔══██║██╔══╝    ╚██╔╝    ╚██╔╝    ╚██╔╝  -->
+<!--██║ ╚████║██╗███████║██╗██║  ██║███████╗   ██║      ██║      ██║   -->
+<!--╚═╝  ╚═══╝╚═╝╚══════╝╚═╝╚═╝  ╚═╝╚══════╝   ╚═╝      ╚═╝      ╚═╝   -->
+<!--</div>-->
+  <img id="logo" src="sniffer.gif" width="100%">
+
+  <div id="input">
+    <div class="field" style="left: 0; top: 4px">
+      <label for="saveFile">Saving to</label>
+      <input type="file" value="~/Desktop/packets.log" id="saveFile" nwsaveas="packets.log">
+      <span id="saveFilename">Desktop/packets.log</span>
+    </div>
+
+    <div class="field" style="right: 150px; top: 4px;">
+      <label for="channels">Channels</label>
+      <input type="text" id="channels" value="1,6,11">
+    </div>
+
+    <div class="field" style="right: 0;">
+      <button id="sniff">Start</button>
+    </div>
+  </div>
+
+  <div id="output">
+    <div id="status">Not sniffing</div>
+    <div id="log"></div>
+  </div>
+
+  <script type="text/javascript" src="app.js"></script>
+</body>
+</html>
