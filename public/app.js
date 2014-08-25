@@ -115,7 +115,8 @@ function setupMenu() {
 }
 
 
-document.querySelector('#authButton').addEventListener('click', function(evt) {
+document.querySelector('#auth').addEventListener('submit', function(evt) {
+  evt.preventDefault();
   authenticate(document.querySelector('#password').value, function(success) {
     if (success) {
       document.querySelector('#auth').style.display = 'none';

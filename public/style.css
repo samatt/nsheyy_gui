@@ -21,7 +21,7 @@ input[type=text], input[type=password] {
   padding: 2px;
 }
 
-button {
+button, input[type=submit] {
   background: #fff;
   border: 1px solid #eee;
   color: #000;
@@ -60,7 +60,7 @@ button {
 
 #log {
   height: 210px;
-  overflow: scroll;
+  overflow: auto;
   font-size: 12px;
   border: 1px solid #ccc;
   padding: 5px;
