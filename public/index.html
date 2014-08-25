@@ -39,6 +39,17 @@
     <div id="log"></div>
   </div>
 
+  <div id="auth">
+    <p>To run N.S.Heyy you need to change permissions to /dev/bpf*<p>
+    <p>( The following command will be executed: sudo chmod o+r /dev/bpf* )
+    <p>
+      Please enter your password to continue:
+      <input type="password" id="password">
+    </p>
+    <button id="authButton">Authenticate</button>
+    <button id="cancelButton">Cancel</button>
+  </div>
+
   <script type="text/javascript" src="app.js"></script>
 </body>
 </html>

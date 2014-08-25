@@ -14,14 +14,14 @@ body {
   display: none;
 }
 
-input[type=text] {
+input[type=text], input[type=password] {
   background: 0;
   color: #fff;
   border: 1px solid #fff;
   padding: 2px;
 }
 
-#sniff {
+button {
   background: #fff;
   border: 1px solid #eee;
   color: #000;
@@ -64,4 +64,16 @@ input[type=text] {
   font-size: 12px;
   border: 1px solid #ccc;
   padding: 5px;
+}
+
+#auth {
+  display: none;
+  padding-top: 160px;
+  text-align: center;
+  position: absolute;
+  width: 100%;
+  height: 100%;
+  top: 0;
+  left: 0;
+  background: rgba(0, 0, 0, .9);
 }

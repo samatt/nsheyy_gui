@@ -1,6 +1,8 @@
+var sniffer = require('nshey');
 var fs = require('fs');
 var Path = require('path');
-var sniffer = require('nshey');
+var exec = require('child_process').exec;
+var nw = require('nw.gui');
 
 var running = false;
 var chooser = document.querySelector('#saveFile');
@@ -13,12 +15,9 @@ var outputEl = document.querySelector('#output');
 var statusInterval;
 var defaultPath = Path.join(process.env['HOME'], 'Desktop', 'packets.log');
 var firstRun = true;
+var win = nw.Window.get();
 
-var nw = require('nw.gui');
-win = nw.Window.get();
-var nativeMenuBar = new nw.Menu({ type: "menubar" });
-nativeMenuBar.createMacBuiltin("N.S.Heyyy");
-win.menu = nativeMenuBar;
+setupMenu();
 
 saveFilenameEl.addEventListener('click', function(evt) {
   chooser.click();
@@ -101,3 +100,45 @@ function stopSniff() {
 
   sniffer.stop();
 }
+
+function setupMenu() {
+  var nativeMenuBar = new nw.Menu({ type: "menubar" });
+  nativeMenuBar.createMacBuiltin("N.S.Heyyy", {hideEdit: true, hideWindow: true});
+  win.menu = nativeMenuBar;
+
+  var fileMenu = new nw.Menu();
+  fileMenu.append(new nw.MenuItem({ label: 'Authenticate', click: function(){
+    document.querySelector('#auth').style.display = 'block';
+  }}));
+
+  win.menu.append(new nw.MenuItem({label: 'File', submenu: fileMenu}));
+}
+
+
+document.querySelector('#authButton').addEventListener('click', function(evt) {
+  authenticate(document.querySelector('#password').value, function(success) {
+    if (success) {
+      document.querySelector('#auth').style.display = 'none';
+    } else {
+      alert('Incorrect password, please try again.');
+    }
+  });
+});
+
+document.querySelector('#cancelButton').addEventListener('click', function(evt) {
+  document.querySelector('#auth').style.display = 'none';
+});
+
+function authenticate(pw, cb) {
+  exec('echo "'+pw+'" | sudo -S chmod o+r /dev/bpf*', function(error, stdout, stderr){
+    if (error !== null) {
+      if (error.toString().indexOf('incorrect password attempt') > -1) {
+        console.log('incorrect password');
+        cb(false);
+      }
+    } else {
+      cb(true);
+    }
+  });
+}
+
