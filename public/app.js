@@ -18,7 +18,6 @@ var defaultPath = Path.join(process.env['HOME'], 'Desktop', 'packets.log');
 var firstRun = true;
 var win = nw.Window.get();
 
-
 setupMenu();
 
 saveFilenameEl.addEventListener('click', function(evt) {
@@ -78,35 +77,35 @@ function startSniff(filename, channels,interface){
 
   var options = options || {};
   if(filename){
-    options.filename = filename;  
+    options.filename = filename;
   }
   else{
     options.filename = defaultPath;
   }
-  
+
   if(channels){
-    options.channels = channels;  
+    options.channels = channels;
   }
   else{
-   options.channels = [1,6,11,36,40,44,48]; 
+    options.channels = [1,6,11,36,40,44,48];
   }
   if(interface){
     options.interface = interface;
   }
-  
+
   options.interval = 5000;
-  
+
   options.cb = function(data){
     logEl.textContent += data;
     logEl.scrollTop = logEl.scrollHeight;
   };
-  
+
   sniffer.start(options);
 
   statusInterval = setInterval(function(){
     statusEl.textContent = 'Sniffing on channel ' + sniffer.getCurrentChannel();
   }, 500);
-  
+
 }
 
 function stopSniff() {
@@ -132,49 +131,49 @@ function setupMenu() {
   win.menu.append(new nw.MenuItem({label: 'File', submenu: fileMenu}));
 
   var snifferMenu = new nw.Menu();
-    var interfaces = [];
-    
-    var addMenuItem = function(l,snifferMenu){
-            snifferMenu.append(new nw.MenuItem({ label: l, click: function(){
-              console.log("Clicked");
-              if (running) {
-                stopSniff();
-              } else {
-                var filename;
-                if (!chooser.value && firstRun) {
-                  filename = defaultPath;
-                } else {
-                  filename = chooser.value;
-                }
+  var interfaces = [];
 
-                if (!filename || !channelsEl.value) {
-                  alert('Please select a file to save logs to');
-                  return false;
-                }
+  var addMenuItem = function(l,snifferMenu){
+    snifferMenu.append(new nw.MenuItem({ label: l, click: function(){
+      console.log("Clicked");
+      if (running) {
+        stopSniff();
+      } else {
+        var filename;
+        if (!chooser.value && firstRun) {
+          filename = defaultPath;
+        } else {
+          filename = chooser.value;
+        }
 
-                var channels = channelsEl.value.split(',');
-                for (var i = 0; i < channels.length; i ++) {
-                  channels[i] = channels[i].trim();
-                }
-                console.log(filename);
-                console.log(channels);
-                interfaceEl.textContent = l;
-                startSniff(filename, channels,l);
-              }
-            }}));
+        if (!filename || !channelsEl.value) {
+          alert('Please select a file to save logs to');
+          return false;
+        }
+
+        var channels = channelsEl.value.split(',');
+        for (var i = 0; i < channels.length; i ++) {
+          channels[i] = channels[i].trim();
+        }
+        console.log(filename);
+        console.log(channels);
+        interfaceEl.textContent = l;
+        startSniff(filename, channels,l);
+      }
+    }}));
+  }
+
+  sniffer.getWiFiInterfaces(function(list){
+    interfaceEl.textContent = list[0];
+    for(var i = 0; i< list.length; i++){
+
+      var label = list[i];
+      console.log(list[i]);
+      addMenuItem(list[i] ,snifferMenu);
     }
 
-    sniffer.getWiFiInterfaces(function(list){
-      interfaceEl.textContent = list[0];
-      for(var i = 0; i< list.length; i++){
-        
-       var label = list[i];
-        console.log(list[i]);
-        addMenuItem(list[i] ,snifferMenu);
-      }
-
-    });
-    win.menu.append(new nw.MenuItem({label: 'Sniffer', submenu: snifferMenu}));
+  });
+  win.menu.append(new nw.MenuItem({label: 'Sniffer', submenu: snifferMenu}));
 }
 
 
@@ -190,6 +189,7 @@ document.querySelector('#auth').addEventListener('submit', function(evt) {
 });
 
 document.querySelector('#cancelButton').addEventListener('click', function(evt) {
+  evt.preventDefault();
   document.querySelector('#auth').style.display = 'none';
 });
 

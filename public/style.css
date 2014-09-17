@@ -4,6 +4,7 @@ body {
   font: 14px "Courier New", monospace;
   margin: 0;
   padding: 20px;
+  overflow: hidden;
 }
 
 #logo {
@@ -68,7 +69,6 @@ button, input[type=submit] {
 
 #auth {
   display: none;
-  padding-top: 160px;
   text-align: center;
   position: absolute;
   width: 100%;
@@ -76,4 +76,10 @@ button, input[type=submit] {
   top: 0;
   left: 0;
   background: rgba(0, 0, 0, .9);
+}
+
+#auth-command {
+  background: #90f9ff;
+  padding: 3px;
+  color: #000;
 }
