@@ -2,7 +2,7 @@
   "author": "Sam Lavigne",
   "name": "NSHeyyyyyyyyyyy",
   "description": "Sniff sniff sniff",
-  "version": "0.0.1",
+  "version": "0.0.2",
   "devDependencies": {
     "gulp": "^3.5.6",
     "nodewebkit": "0.10.2",
