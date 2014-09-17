@@ -1,6 +1,6 @@
 {
   "name": "nsheyyy",
-  "version": "0.0.1",
+  "version": "0.0.2",
   "main": "index.html",
   "window": {
     "title": "",
@@ -14,7 +14,7 @@
     "resizable": false
   },
   "dependencies": {
-    "nshey": "0.0.7"
+    "nshey": "0.0.9"
   }
 }
 
