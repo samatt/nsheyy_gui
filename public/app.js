@@ -10,6 +10,7 @@ var sniffButton = document.querySelector('#sniff');
 var statusEl = document.querySelector('#status');
 var logEl = document.querySelector('#log');
 var channelsEl = document.querySelector('#channels');
+var interfaceEl = document.querySelector("#interface");
 var saveFilenameEl = document.querySelector('#saveFilename');
 var outputEl = document.querySelector('#output');
 var statusInterval;
@@ -17,10 +18,19 @@ var defaultPath = Path.join(process.env['HOME'], 'Desktop', 'packets.log');
 var firstRun = true;
 var win = nw.Window.get();
 
+
 setupMenu();
 
 saveFilenameEl.addEventListener('click', function(evt) {
   chooser.click();
+});
+
+win.on('close',function(){
+  if(running){
+    alert("You have to stop sniffing before you quit");
+    return;
+  }
+  this.close(true);
 });
 
 chooser.addEventListener('change', function(evt) {
@@ -52,43 +62,51 @@ sniffButton.addEventListener('click', function(evt) {
     var channels = channelsEl.value.split(',');
     for (var i = 0; i < channels.length; i ++) {
       channels[i] = channels[i].trim();
-    }
 
+    }
+    console.log(filename);
+    console.log(channels);
     startSniff(filename, channels);
   }
 });
 
-function startSniff(filename, channels){
+function startSniff(filename, channels,interface){
   running = true;
   channelsEl.disabled = false;
   sniffButton.textContent = 'Stop';
   outputEl.style.display = 'block';
 
-  sniffer.getInterface(function(obj) {
-    var interfaceName;
+  var options = options || {};
+  if(filename){
+    options.filename = filename;  
+  }
+  else{
+    options.filename = defaultPath;
+  }
+  
+  if(channels){
+    options.channels = channels;  
+  }
+  else{
+   options.channels = [1,6,11,36,40,44,48]; 
+  }
+  if(interface){
+    options.interface = interface;
+  }
+  
+  options.interval = 5000;
+  
+  options.cb = function(data){
+    logEl.textContent += data;
+    logEl.scrollTop = logEl.scrollHeight;
+  };
+  
+  sniffer.start(options);
 
-    if (obj) {
-      interfaceName = obj.name;
-    } else {
-      interfaceName = 'en0';
-    }
-
-    sniffer.sniff(interfaceName, function(data) {
-      logEl.textContent += data;
-      logEl.scrollTop = logEl.scrollHeight;
-      fs.appendFile(filename, data, function (err) {
-        if (err) {
-          console.log(err);
-        }
-      });
-    });
-
-    sniffer.hop(channels);
-
-    statusInterval = setInterval(function(){
-      statusEl.textContent = 'Sniffing on channel ' + sniffer.getCurrentChannel();
-    }, 500);
-  });
+  statusInterval = setInterval(function(){
+    statusEl.textContent = 'Sniffing on channel ' + sniffer.getCurrentChannel();
+  }, 500);
+  
 }
 
 function stopSniff() {
@@ -112,6 +130,51 @@ function setupMenu() {
   }}));
 
   win.menu.append(new nw.MenuItem({label: 'File', submenu: fileMenu}));
+
+  var snifferMenu = new nw.Menu();
+    var interfaces = [];
+    
+    var addMenuItem = function(l,snifferMenu){
+            snifferMenu.append(new nw.MenuItem({ label: l, click: function(){
+              console.log("Clicked");
+              if (running) {
+                stopSniff();
+              } else {
+                var filename;
+                if (!chooser.value && firstRun) {
+                  filename = defaultPath;
+                } else {
+                  filename = chooser.value;
+                }
+
+                if (!filename || !channelsEl.value) {
+                  alert('Please select a file to save logs to');
+                  return false;
+                }
+
+                var channels = channelsEl.value.split(',');
+                for (var i = 0; i < channels.length; i ++) {
+                  channels[i] = channels[i].trim();
+                }
+                console.log(filename);
+                console.log(channels);
+                interfaceEl.textContent = l;
+                startSniff(filename, channels,l);
+              }
+            }}));
+    }
+
+    sniffer.getWiFiInterfaces(function(list){
+      interfaceEl.textContent = list[0];
+      for(var i = 0; i< list.length; i++){
+        
+       var label = list[i];
+        console.log(list[i]);
+        addMenuItem(list[i] ,snifferMenu);
+      }
+
+    });
+    win.menu.append(new nw.MenuItem({label: 'Sniffer', submenu: snifferMenu}));
 }
 
 
