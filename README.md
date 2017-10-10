@@ -11,9 +11,13 @@ The log file has the following fields
 ``timestamp,Interface,power,frequency,band,packetType,field1,field2``
 
 Interface: Redundant field. Always Radio as we're working with Wifi
+
 Power: Rssi mapped to the randge 0-255. Not very reliable.
+
 Frequency: Current center frequency (this is the current channel). 
+
 Band: 2.4 or 5 Ghz indicator (also pretty redundant)
+
 packetType: This is important. It describes what type of packet it is. 
 
 the first four fields are constant for all packets. field1 and field2 aer dependent on packetType.
